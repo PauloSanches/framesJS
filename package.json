@@ -1,0 +1,26 @@
+{
+  "name": "framesJS",
+  "version": "0.1.0",
+  "description": "FramesJS - javascript library for SpriteSheet animation handler ",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/PauloSanches/framesJS.git"
+  },
+  "author": "Paulo Sanches",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PauloSanches/framesJS/issues"
+  },
+  "homepage": "https://github.com/PauloSanches/framesJS",
+  "devDependencies": {
+    "gulp": "^3.8.6",
+    "gulp-clean": "^0.3.1",
+    "gulp-concat": "^2.3.4",
+    "gulp-connect": "^2.0.5",
+    "gulp-jshint": "^1.6.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-replace": "^0.4.0",
+    "gulp-uglify": "^0.3.0",
+    "gulp-watch": "^0.5.4"
+  }
+}
