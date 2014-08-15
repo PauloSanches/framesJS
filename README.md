@@ -1,4 +1,4 @@
-FramesJS 
+FramesJS [![Build Status](https://travis-ci.org/PauloSanches/framesJS.svg?branch=master)](https://travis-ci.org/PauloSanches/framesJS)
 ==========
 
 Javascript SpriteSheet Sequence Animation
