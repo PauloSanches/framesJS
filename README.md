@@ -6,7 +6,7 @@ Javascript SpriteSheet Sequence Animation
 ## Getting Started
 Just create an instance of FramesJS and pass params
 ````js
-var frames = new snch.FramesJS('id', {id:'frames'});
+var frames = new snch.FramesJS('id', {});
 ````
 
 ## Params
