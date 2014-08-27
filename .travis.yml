@@ -6,4 +6,4 @@ before_script:
   - npm install --save-dev gulp
 
 script:
-  - gulp test-travis
+  - gulp travis

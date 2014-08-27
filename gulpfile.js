@@ -1,69 +1,55 @@
+'use strict';
+
 var gulp = require('gulp'),
-  fs = require('fs'),
-  jshint = require("gulp-jshint"),
-  uglify = require("gulp-uglify"),
-  watch = require("gulp-watch"),
-  rename = require('gulp-rename'),
-  concat = require('gulp-concat'),
-  clean = require('gulp-clean'),
-  pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')),
-  src = [
-    'src/preloader.js',
-    'src/mainLoop.js',
-    'src/prefix.js',
-    'src/frames.js',
-    'src/engine.js',
-    'src/sprite.js',
-    'src/utils.js',
-    'src/suffix.js'
-  ];
+  plugins = require('gulp-load-plugins')(),
+  path = require('path'),
+  runSequence = require('run-sequence'),
+  config = require(path.resolve(process.cwd(), 'config.js')),
+  pkg = require(path.resolve(process.cwd(), 'package.json'));
 
-// Default task
-gulp.task('default', function() {
-  gulp.watch(src, ['build']);
+gulp.task('init',['clean']);
+gulp.task('travis', ['build']);
+
+gulp.task('default', function(){
+  gulp.watch(config.scripts, function(){
+    runSequence('lint','concat');
+  });
 });
 
-// Concat task
-gulp.task('concat', function() {
-  gulp.src(src)
-    .pipe(concat('./frames.js'))
-    .pipe(gulp.dest('./'));
+gulp.task('build', function() {
+  runSequence('lint','concat','rename','minify');
 });
 
-
-// Lint JavaScript
 gulp.task('lint', function() {
-  gulp.src('./frames.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+  return gulp.src(config.dist + config.output)
+    .pipe(plugins.plumber())
+    .pipe(plugins.jshint())
+    .pipe(plugins.jshint.reporter('jshint-stylish'));
 });
 
-// Build script
-gulp.task('build', ['clean','concat','lint'], function() {
-  gulp.start('minify');
+gulp.task('concat', function() {
+  return gulp.src(config.scripts)
+    .pipe(plugins.plumber())
+    .pipe(plugins.concat(config.output))
+    .pipe(gulp.dest(config.dist));
 });
 
-// Minify JavaScript
-gulp.task('minify', ['rename'], function() {
-  gulp.src('frames.min.js')
-    .pipe(uglify())
-    .pipe(gulp.dest('./'));
+gulp.task('minify', function() {
+  return gulp.src(config.dist + config.outputMin)
+    .pipe(plugins.plumber())
+    .pipe(plugins.uglify())
+    .pipe(gulp.dest(config.dist));
 });
 
-// Rename minify file
 gulp.task('rename', function() {
-  return gulp.src('frames.js')
-    .pipe(rename('frames.min.js'))
-    .pipe(gulp.dest('./'));
+  return gulp.src(config.dist + config.output)
+    .pipe(plugins.plumber())
+    .pipe(plugins.rename(config.dist + config.outputMin))
+    .pipe(gulp.dest(''));
 });
 
-// Clean files
 gulp.task('clean', function() {
-  return gulp.src('frames.min.js', {
-      read: false
-    })
-    .pipe(clean());
+  gulp.src(['.git','LICENSE', 'README.md'])
+    .pipe(plugins.plumber())
+    .pipe(plugins.clean());
 });
-
-// Travis CI
-gulp.task('test-travis', ['build']);
